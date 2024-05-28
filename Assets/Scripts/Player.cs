@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.4f;
     [SerializeField]
+    private int _speedMultiplier = 2;
+    [SerializeField]
     private GameObject _laserprefab;
     [SerializeField]
     private GameObject _TripleLaserPrefab;
@@ -19,20 +21,32 @@ public class Player : MonoBehaviour
     private Spawn _spawnmanager;
     [SerializeField]
     private bool _tripleLaserActive = false;
+    [SerializeField]
+    private bool _speedPowerupActive = false;
+    [SerializeField]
+    private bool _shieldActive = false;
+    [SerializeField]
+    private GameObject _shieldVisual;
+    [SerializeField]
+    private int _score;
+    private UI _ui;
     void Start()
     {
-        // take the current position = new position
         transform.position = new Vector3(0, 0, 0);
         _spawnmanager = GameObject.Find("Spawnobject").GetComponent<Spawn>();
-
+        _ui = GameObject.Find("Canvas").GetComponent<UI>();
         if (_spawnmanager == null)
         {
             Debug.LogError("spawn error");
         }
 
+        if (_ui == null)
+        {
+            Debug.LogError("Ui manager");
+        }
+
     }
 
-    // Update is called once per frame
     void Update()
     {
         PlayerMovement();
@@ -54,8 +68,10 @@ public class Player : MonoBehaviour
 
 
         Vector3 direction = new Vector3(horizontalmoving, verticalmoving, 0);
+
         transform.Translate(direction * _speed * Time.deltaTime);
 
+        
         /*  if (transform.position.y >= 0)
           {
               transform.position = new Vector3(transform.position.x, 0, 0);
@@ -95,11 +111,21 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_shieldActive == true)
+        {
+            _shieldActive = false;
+            _shieldVisual.SetActive(false);
+            return;
+        }
+
         _health -= 1;
+        _ui.UpdateLives(_health);
+
         if (_health < 1)
         {
             _spawnmanager.OnPlayerDeath();
             Destroy(this.gameObject);
+            
         }
     }
 
@@ -113,5 +139,32 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         _tripleLaserActive = false;
+    }
+
+    public void SpeedPowerupActive()
+    {
+        _speedPowerupActive = true;
+        _speed = _speed * _speedMultiplier;
+        StartCoroutine(SpeedPowerDownCoRoutine());
+    }
+
+    IEnumerator SpeedPowerDownCoRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+
+        _speedPowerupActive = false;
+        _speed = _speed / _speedMultiplier;
+    }
+
+    public void ShieldsActive()
+    {
+        _shieldActive = true;
+        _shieldVisual.SetActive(true);
+    }
+
+    public void AddScore(int points)
+    {
+        _score += points;
+        _ui.ScoreUpdate(_score);
     }
 }

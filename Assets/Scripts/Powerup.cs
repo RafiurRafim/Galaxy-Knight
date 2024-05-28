@@ -6,7 +6,8 @@ public class Powerup : MonoBehaviour
 {   
     [SerializeField]
     private float _powerupspeed = 3f;
-    // Start is called before the first frame update
+    [SerializeField]
+    private int powerUpId;
     void Start()
     {
         float positionx = Random.Range(-8f, 8f);
@@ -30,8 +31,40 @@ public class Powerup : MonoBehaviour
             Player player = collision.transform.GetComponent<Player>();
             if (player != null)
             {
-                player.TripleLaserActiver();
+               /* if (powerUpId == 0)
+                {
+                    player.TripleLaserActiver();
+                }
+                else if (powerUpId == 1)
+                {
+                    Debug.Log("powerup2");
+                }
+                else if (powerUpId == 2)
+                {
+                    Debug.Log("powerup2");
+                }
+*/
+                switch (powerUpId)
+                {
+                    case 0:
+                        player.TripleLaserActiver();
+                        break;
+                    case 1:
+                        Debug.Log("speedboost");
+                        player.SpeedPowerupActive();
+                        break;
+                    case 2:
+                        player.ShieldsActive();
+                        Debug.Log("shield");
+                        break;
+                    default:
+                        Debug.Log("default");
+                        break;
+                         
+                }
             }
+
+
             Destroy(this.gameObject);
         }
     }

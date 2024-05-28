@@ -5,12 +5,23 @@ using UnityEngine;
 public class Asteroids : MonoBehaviour
 {
     [SerializeField]
-    private float _asteroidSpeed = 4f;
-    // Start is called before the first frame update
+    private float _asteroidSpeed = 5f;
+    private Player _player;
+    private Animator _anim;
     void Start()
     {
-        float x = Random.Range(-9, 9);
-        transform.position = new Vector3(x, 8, 0);
+        _player = GameObject.Find("SpaceShip").GetComponent<Player>();
+        if (_player == null)
+        {
+            Debug.LogError("_player is null");
+        }
+        _anim = GetComponent<Animator>();
+
+        if (_anim == null)
+        {
+            Debug.LogError("_anim is null");
+        }
+       
     }
 
     // Update is called once per frame
@@ -19,7 +30,8 @@ public class Asteroids : MonoBehaviour
         transform.Translate(Vector3.down * Time.deltaTime * _asteroidSpeed);
         if (transform.position.y <= -5.2)
         {
-            Start();
+            float x = Random.Range(-9, 9);
+            transform.position = new Vector3(x, 8, 0);
         }
     }
 
@@ -27,10 +39,18 @@ public class Asteroids : MonoBehaviour
     {
         if (other.tag == "Laser")
         {
-            Destroy(this.gameObject);
+
             Destroy(other.gameObject);
-            
+
             Debug.Log("hit laser");
+            if (_player != null)
+            {
+                _player.AddScore(10);
+
+            }
+            _anim.SetTrigger("OnEnemyDeath");
+            _asteroidSpeed = 0;
+            Destroy(this.gameObject,2.8f);
         }
 
         if (other.tag == "Player")
@@ -41,7 +61,13 @@ public class Asteroids : MonoBehaviour
                 player.Damage();
                 Debug.Log("hit player");
             }
-            Destroy(this.gameObject);
+            if(player==null)
+            {
+                Debug.LogError("player is null");
+            }
+            _anim.SetTrigger("OnEnemyDeath");
+            _asteroidSpeed = 0;
+            Destroy(this.gameObject,2.8f);
         }
     }
 }

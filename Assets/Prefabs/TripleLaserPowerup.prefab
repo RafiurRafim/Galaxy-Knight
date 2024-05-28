@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7920556935762076595}
   - component: {fileID: 3827768193337608987}
   - component: {fileID: 32812414736510577}
+  - component: {fileID: 834263111459714145}
   m_Layer: 0
   m_Name: TripleLaserPowerup
   m_TagString: Untagged
@@ -133,3 +134,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a503cc32bea4a4b44a8102002cb2fd73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _powerupspeed: 3
+  powerUpId: 0
+--- !u!95 &834263111459714145
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508900621792610586}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6f32501005ecead438659f05095f3c47, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
